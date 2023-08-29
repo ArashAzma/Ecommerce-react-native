@@ -11,12 +11,12 @@ import CartItemCard from "../components/CartItemCard";
 
 const CartScreen = () => {
     const navigation = useNavigation();
-    const { cart } = useContext(cartContext);
+    const { cart, totalCost } = useContext(cartContext);
     return (
         <View style={tw`flex-1 bg-white  `}>
             <SafeAreaView style={tw`flex-1 items-center mt-8`}>
                 <Pressable
-                    style={tw`w-full  opacity-60 px-8
+                    style={tw`w-full  opacity-60 px-8 h-[3%]
                     `}
                     onPress={() => navigation.goBack()}
                 >
@@ -27,18 +27,16 @@ const CartScreen = () => {
                     `}
                     />
                 </Pressable>
-                <View style={tw`flex-row w-full mt-8 mb-4 px-8`}>
+                <View style={tw`flex-row w-full mt-4 px-8 h-[6%]`}>
                     <Text style={tw`text-2xl mr-1`}>Shopping cart</Text>
                     <View>
                         <FontAwesomeIcon icon={faCircle} size={22} />
-                        <Text
-                            style={tw`text-lg absolute text-white right-1.5 -top-1`}
-                        >
+                        <Text style={tw` absolute text-white right-1.75 `}>
                             {cart.length}
                         </Text>
                     </View>
                 </View>
-                <View style={tw`w-full h-[80%] px-8`}>
+                <View style={tw`w-full h-[75%] px-8`}>
                     <FlatList
                         data={cart}
                         contentContainerStyle={tw`pb-3`}
@@ -51,6 +49,14 @@ const CartScreen = () => {
                         )}
                         keyExtractor={(item) => item.id}
                     />
+                </View>
+                <View
+                    style={tw`flex-row items-center justify-between w-full px-8 h-[16%]`}
+                >
+                    <Text style={tw`text-lg font-semibold`}>Total:</Text>
+                    <Text style={tw`text-lg border-b-2 border-gray-400`}>
+                        ${totalCost()}
+                    </Text>
                 </View>
             </SafeAreaView>
         </View>

@@ -19,13 +19,16 @@ const ProductCard = ({ item }) => {
             style={[
                 tw`bg-white py-6 px-4 items-center justify-center rounded-lg shadow-sm`,
                 { maxWidth: width / 2.3 },
-            ]}>
+            ]}
+        >
             <Image
                 source={{ uri: image }}
                 style={[tw`mb-2 w-full `, { height: width / 2.8 }]}
                 resizeMode='contain'
             />
-            <Text style={tw`font-semibold text-4`}>{title}</Text>
+            <Text style={tw`font-semibold text-4`} numberOfLines={5}>
+                {title}
+            </Text>
             <View style={tw`flex-row w-full justify-start mt-4 items-center`}>
                 <Text style={tw`font-bold text-lg mr-2`}>${price}</Text>
                 <Text style={[tw``, { textDecorationLine: "line-through" }]}>
@@ -38,7 +41,8 @@ const ProductCard = ({ item }) => {
                         addToCart(item);
                         setInCart(true);
                     }}
-                    style={tw`absolute bg-emerald-400  p-2 top-4 right-4 rounded-full shadow-lg`}>
+                    style={tw`absolute bg-emerald-400  p-2 top-4 right-4 rounded-full shadow-lg`}
+                >
                     <FontAwesomeIcon icon={faPlus} style={tw`text-white`} />
                 </TouchableOpacity>
             ) : (
@@ -47,7 +51,8 @@ const ProductCard = ({ item }) => {
                         removeFromCart(item);
                         setInCart(false);
                     }}
-                    style={tw`absolute bg-red-600  p-2 top-4 right-4 rounded-full shadow-lg`}>
+                    style={tw`absolute bg-red-600  p-2 top-4 right-4 rounded-full shadow-lg`}
+                >
                     <FontAwesomeIcon icon={faMinus} style={tw`text-white`} />
                 </TouchableOpacity>
             )}

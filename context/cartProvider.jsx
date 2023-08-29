@@ -34,9 +34,16 @@ const CartProvider = ({ children }) => {
         });
         return isInCart;
     };
+    const totalCost = () => {
+        let sum = 0;
+        for (let i of cart) {
+            sum += i.price;
+        }
+        return sum;
+    };
     return (
         <cartContext.Provider
-            value={{ cart, addToCart, removeFromCart, checkCart }}
+            value={{ cart, addToCart, removeFromCart, checkCart, totalCost }}
         >
             {children}
         </cartContext.Provider>

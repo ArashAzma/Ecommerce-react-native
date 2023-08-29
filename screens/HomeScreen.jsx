@@ -7,6 +7,7 @@ import {
     Pressable,
     TextInput,
     TouchableOpacity,
+    ActivityIndicator,
 } from "react-native";
 import { fetchAllProducts, fetchCategories } from "../api/productsData";
 import React, { useEffect, useState, useCallback } from "react";
@@ -14,20 +15,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import ProductCard from "../components/productCard";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
+import NetInfo from "@react-native-community/netinfo";
 import Title from "../components/Title";
 import tw from "twrnc";
 const HomeScreen = () => {
     const [activeCategory, setActiveCategory] = useState(null);
-
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [search, setSearch] = useState("");
     const [refreshing, setRefreshing] = useState(false);
+    const [online, setOnline] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     const navigation = useNavigation();
-
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         getAllData();
@@ -94,7 +97,6 @@ const HomeScreen = () => {
             const temp = products.filter((item) =>
                 searchRegex.test(item.title)
             );
-            console.log(temp);
             setFilteredProducts(temp);
         }
     };
@@ -102,99 +104,122 @@ const HomeScreen = () => {
         navigation.navigate("Product", { id });
     };
     useEffect(() => {
+        NetInfo.fetch().then((state) => {
+            setOnline(state.isInternetReachable);
+        });
+        setLoading(true);
         getCategories();
         getAllData();
         setActiveCategory("All");
+        setLoading(false);
     }, []);
 
     const DATA = filteredProducts.length > 0 ? filteredProducts : products;
     return (
         <View style={tw`flex-1 bg-[#F8F6F4] items-center justify-center`}>
-            <SafeAreaView
-                style={tw`flex-1 w-full items-center justify-center px-6`}
-            >
-                <View style={tw` w-full my-1`}>
-                    <TextInput
-                        value={search}
-                        onChangeText={(text) => setSearch(text)}
-                        onSubmitEditing={handleSearch}
-                        style={tw`bg-white w-full p-2 text-lg shadow-sm rounded-lg `}
-                        placeholder='Search products'
-                    />
-                    {search.length > 0 && (
-                        <TouchableOpacity
-                            style={tw`absolute top-3 right-2`}
-                            onPress={() => setSearch("")}
-                        >
-                            <FontAwesomeIcon icon={faXmark} />
-                        </TouchableOpacity>
-                    )}
-                </View>
-                <ScrollView
-                    horizontal
-                    contentContainerStyle={tw`mb-6 h-full p-2`}
-                    showsHorizontalScrollIndicator={false}
+            {!online && (
+                <View
+                    style={tw`w-full items-center justify-center bg-red-700 py-2`}
                 >
-                    {categories.map((cat) => (
-                        <Pressable
-                            key={cat}
-                            onPress={() => handleCategoryPress(cat)}
-                            style={[
-                                tw`mr-2 p-2 rounded-lg`,
-                                {
-                                    backgroundColor:
-                                        activeCategory === cat
-                                            ? "#E3F4F4"
-                                            : "white",
-                                    shadowColor:
-                                        activeCategory === cat
-                                            ? "#000000"
-                                            : "#00000029",
-                                },
-                            ]}
-                        >
-                            <Text
+                    <Text style={tw`text-white text-lg`}>Offline</Text>
+                </View>
+            )}
+            {loading ? (
+                <ActivityIndicator size='large' />
+            ) : (
+                <SafeAreaView
+                    style={tw`flex-1 w-full items-center justify-center `}
+                >
+                    {/* //search */}
+                    <View style={tw` w-full my-1 px-6 `}>
+                        <TextInput
+                            value={search}
+                            onChangeText={(text) => setSearch(text)}
+                            onSubmitEditing={handleSearch}
+                            style={tw`bg-white w-full p-2 text-lg shadow-sm rounded-lg `}
+                            placeholder='Search products'
+                        />
+                        {search.length > 0 && (
+                            <TouchableOpacity
+                                style={tw`absolute top-4 right-9`}
+                                onPress={() => setSearch("")}
+                            >
+                                <FontAwesomeIcon icon={faXmark} />
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                    {/* //categories */}
+                    <ScrollView
+                        horizontal
+                        contentContainerStyle={tw`mb-6 h-26 mt-4 px-6`}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {categories.map((cat) => (
+                            <Pressable
+                                key={cat}
+                                onPress={() => handleCategoryPress(cat)}
                                 style={[
-                                    tw`text-lg font-bold`,
+                                    tw`mr-2 px-2 rounded-lg items-center justify-center h-14`,
                                     {
-                                        color:
+                                        backgroundColor:
                                             activeCategory === cat
-                                                ? "blue"
-                                                : "black",
+                                                ? "#E3F4F4"
+                                                : "white",
+                                        shadowColor:
+                                            activeCategory === cat
+                                                ? "#000000"
+                                                : "#00000029",
                                     },
                                 ]}
                             >
-                                {cat}
-                            </Text>
-                        </Pressable>
-                    ))}
-                </ScrollView>
-                <Title title='New Arrivals' />
-                <FlatList
-                    data={DATA}
-                    numColumns={2}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                        />
-                    }
-                    ItemSeparatorComponent={() => <View style={tw`h-8`}></View>}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={tw`items-center`}
-                    renderItem={(item) => {
-                        return (
-                            <Pressable
-                                onPress={() => handleNavigation(item.item.id)}
-                                style={tw`ml-6`}
-                            >
-                                <ProductCard item={item.item} />
+                                <Text
+                                    style={[
+                                        tw`text-lg font-bold text-center`,
+                                        {
+                                            color:
+                                                activeCategory === cat
+                                                    ? "blue"
+                                                    : "black",
+                                        },
+                                    ]}
+                                >
+                                    {cat}
+                                </Text>
                             </Pressable>
-                        );
-                    }}
-                    keyExtractor={(item) => item.id}
-                />
-            </SafeAreaView>
+                        ))}
+                    </ScrollView>
+                    <Title title='New Arrivals' />
+                    {/* // products */}
+                    <FlatList
+                        data={DATA}
+                        numColumns={2}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
+                        ItemSeparatorComponent={() => (
+                            <View style={tw`h-4`}></View>
+                        )}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={tw`items-center justify-between `}
+                        renderItem={(item) => {
+                            return (
+                                <Pressable
+                                    onPress={() =>
+                                        handleNavigation(item.item.id)
+                                    }
+                                    style={tw`mx-4`}
+                                >
+                                    <ProductCard item={item.item} />
+                                </Pressable>
+                            );
+                        }}
+                        keyExtractor={(item) => item.id}
+                    />
+                </SafeAreaView>
+            )}
         </View>
     );
 };

@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import tw from "twrnc";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBasketShopping } from "@fortawesome/free-solid-svg-icons/faBasketShopping";
-import { faBars, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { cartContext } from "../context/cartProvider";
@@ -16,9 +16,8 @@ const Header = () => {
             <SafeAreaView
                 style={tw`flex-row w-full justify-between items-center p-2 px-6`}
             >
-                <FontAwesomeIcon icon={faBars} size={20} />
                 <Pressable onPress={() => navigation.navigate("Home")}>
-                    <Text style={tw`text-2xl font-bold`}>NOORI</Text>
+                    <Text style={tw`text-2xl font-bold`}>Arash Shop</Text>
                 </Pressable>
                 <View>
                     <Pressable onPress={() => navigation.navigate("Cart")}>
