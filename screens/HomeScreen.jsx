@@ -45,7 +45,6 @@ const HomeScreen = () => {
             const value = await AsyncStorage.getItem("@products");
             if (value) {
                 setProducts(JSON.parse(value));
-                console.log("\nSTORAGE\n");
             } else {
                 const data = await fetchAllProducts();
                 if (data) {
@@ -54,7 +53,6 @@ const HomeScreen = () => {
                         "@products",
                         JSON.stringify(data)
                     );
-                    console.log("SAVED");
                 }
             }
         } catch (err) {
@@ -152,100 +150,105 @@ const HomeScreen = () => {
                             </TouchableOpacity>
                         )}
                     </View>
-                    {/* // banner */}
-                    <View
-                        style={tw`w-full bg-white my-12 items-end flex-row h-22 `}
-                    >
-                        <View style={tw`w-[40%] h-full justify-center pl-8`}>
-                            <Text style={tw`text-3xl font-black`}>Arash %</Text>
-                            <Text style={tw` font-semibold opacity-50`}>
-                                everything you ever wanted
-                            </Text>
-                        </View>
-                        <Image
-                            source={require("../assets/Hero.png")}
-                            style={{
-                                ...tw`absolute -bottom-13 -right-3`,
-                                height: width / 2.1,
-                                width: width / 1.7,
-                            }}
-                            resizeMode='contain'
-                        />
-                    </View>
-                    {/* //categories */}
-
-                    <ScrollView
-                        horizontal
-                        contentContainerStyle={tw`mb-12  h-26 px-4 ${
-                            Platform.OS === "ios" ? " pb-0 mb-0 " : ""
-                        }`}
-                        showsHorizontalScrollIndicator={false}
-                    >
-                        {categories.map((cat) => (
-                            <Pressable
-                                key={cat}
-                                onPress={() => handleCategoryPress(cat)}
-                                style={[
-                                    tw`mr-2 px-2 rounded-lg items-center justify-center h-14`,
-                                    {
-                                        backgroundColor:
-                                            activeCategory === cat
-                                                ? "#E3F4F4"
-                                                : "white",
-                                        shadowColor:
-                                            activeCategory === cat
-                                                ? "#000000"
-                                                : "#00000029",
-                                    },
-                                ]}
+                    <ScrollView>
+                        {/* // banner */}
+                        <View
+                            style={tw`w-full bg-white my-12 items-end flex-row h-22 `}
+                        >
+                            <View
+                                style={tw`w-[40%] h-full justify-center pl-8`}
                             >
-                                <Text
+                                <Text style={tw`text-3xl font-black`}>
+                                    Arash %
+                                </Text>
+                                <Text style={tw` font-semibold opacity-50`}>
+                                    everything you ever wanted
+                                </Text>
+                            </View>
+                            <Image
+                                source={require("../assets/Hero.png")}
+                                style={{
+                                    ...tw`absolute -bottom-13 -right-3`,
+                                    height: width / 2.1,
+                                    width: width / 1.7,
+                                }}
+                                resizeMode='contain'
+                            />
+                        </View>
+
+                        {/* //categories */}
+                        <ScrollView
+                            horizontal
+                            contentContainerStyle={tw`h-16 px-4 ${
+                                Platform.OS === "ios" ? " pb-0 mb-0 " : ""
+                            }`}
+                            showsHorizontalScrollIndicator={false}
+                        >
+                            {categories.map((cat) => (
+                                <Pressable
+                                    key={cat}
+                                    onPress={() => handleCategoryPress(cat)}
                                     style={[
-                                        tw`text-lg font-bold text-center`,
+                                        tw`mr-2 px-2 rounded-lg items-center justify-center h-14`,
                                         {
-                                            color:
+                                            backgroundColor:
                                                 activeCategory === cat
-                                                    ? "blue"
-                                                    : "black",
+                                                    ? "#E3F4F4"
+                                                    : "white",
+                                            shadowColor:
+                                                activeCategory === cat
+                                                    ? "#000000"
+                                                    : "#00000029",
                                         },
                                     ]}
                                 >
-                                    {cat}
-                                </Text>
-                            </Pressable>
-                        ))}
-                    </ScrollView>
-                    {/* // products */}
-                    <Title title='New Arrivals' />
-
-                    <FlatList
-                        data={DATA}
-                        numColumns={2}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                            />
-                        }
-                        ItemSeparatorComponent={() => (
-                            <View style={tw`h-4 `}></View>
-                        )}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={tw`items-center justify-between`}
-                        renderItem={(item) => {
-                            return (
-                                <Pressable
-                                    onPress={() =>
-                                        handleNavigation(item.item.id)
-                                    }
-                                    style={tw`mx-4`}
-                                >
-                                    <ProductCard item={item.item} />
+                                    <Text
+                                        style={[
+                                            tw`text-lg font-bold text-center`,
+                                            {
+                                                color:
+                                                    activeCategory === cat
+                                                        ? "blue"
+                                                        : "black",
+                                            },
+                                        ]}
+                                    >
+                                        {cat}
+                                    </Text>
                                 </Pressable>
-                            );
-                        }}
-                        keyExtractor={(item) => item.id}
-                    />
+                            ))}
+                        </ScrollView>
+                        {/* // products */}
+                        <Title title='New Arrivals' />
+                        <FlatList
+                            data={DATA}
+                            numColumns={2}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={onRefresh}
+                                />
+                            }
+                            ItemSeparatorComponent={() => (
+                                <View style={tw`h-4 `}></View>
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={tw`items-center justify-between`}
+                            renderItem={(item) => {
+                                return (
+                                    <Pressable
+                                        onPress={() =>
+                                            handleNavigation(item.item.id)
+                                        }
+                                        style={tw`mx-4`}
+                                    >
+                                        <ProductCard item={item.item} />
+                                    </Pressable>
+                                );
+                            }}
+                            keyExtractor={(item) => item.id}
+                        />
+                    </ScrollView>
                 </SafeAreaView>
             )}
         </View>

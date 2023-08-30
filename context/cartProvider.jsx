@@ -9,11 +9,9 @@ const CartProvider = ({ children }) => {
         if (value) {
             setCart(JSON.parse(value));
         }
-        console.log("GOT CART");
     };
     const changeCart = async (items) => {
         await AsyncStorage.setItem("@Cart", JSON.stringify(items));
-        console.log("CHANGED");
     };
     useEffect(() => {
         getCart();
