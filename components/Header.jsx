@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Platform } from "react-native";
 import React, { useContext } from "react";
 import tw from "twrnc";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -12,12 +12,14 @@ const Header = () => {
     const navigation = useNavigation();
     const { cart } = useContext(cartContext);
     return (
-        <View style={tw`flex-row w-full justify-between items-center mt-6`}>
+        <View style={tw`flex-row w-full justify-between items-center mt-2`}>
             <SafeAreaView
-                style={tw`flex-row w-full justify-between items-center p-2 px-6`}
+                style={tw`flex-row w-full justify-between items-center ${
+                    Platform.OS !== "ios" && "p-3"
+                } px-6`}
             >
                 <Pressable onPress={() => navigation.navigate("Home")}>
-                    <Text style={tw`text-2xl font-bold`}>Arash Shop</Text>
+                    <Text style={tw`text-2xl font-bold`}>Shop</Text>
                 </Pressable>
                 <View>
                     <Pressable onPress={() => navigation.navigate("Cart")}>

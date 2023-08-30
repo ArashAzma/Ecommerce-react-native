@@ -8,6 +8,8 @@ import {
     TextInput,
     TouchableOpacity,
     ActivityIndicator,
+    Image,
+    Dimensions,
 } from "react-native";
 import { fetchAllProducts, fetchCategories } from "../api/productsData";
 import React, { useEffect, useState, useCallback } from "react";
@@ -29,7 +31,7 @@ const HomeScreen = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [online, setOnline] = useState(true);
     const [loading, setLoading] = useState(true);
-
+    const { width, height } = Dimensions.get("window");
     const navigation = useNavigation();
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -89,6 +91,7 @@ const HomeScreen = () => {
     };
     const handleSearch = (e) => {
         e.preventDefault();
+        setLoading(true);
         if (search.length === 0) {
             setSearch("");
             setFilteredProducts([]);
@@ -99,6 +102,7 @@ const HomeScreen = () => {
             );
             setFilteredProducts(temp);
         }
+        setLoading(false);
     };
     const handleNavigation = (id) => {
         navigation.navigate("Product", { id });
@@ -148,10 +152,32 @@ const HomeScreen = () => {
                             </TouchableOpacity>
                         )}
                     </View>
+                    {/* // banner */}
+                    <View
+                        style={tw`w-full bg-white my-6 items-end flex-row max-h-70`}
+                    >
+                        <View style={tw`w-[40%] h-full  justify-center pl-6`}>
+                            <Text style={tw`text-3xl font-black`}>Arash %</Text>
+                            <Text style={tw` font-semibold opacity-50`}>
+                                everything you ever wanted
+                            </Text>
+                        </View>
+                        <Image
+                            source={require("../assets/Hero.jpg")}
+                            style={{
+                                height: width / 2,
+                                width: width / 1.5,
+                            }}
+                            resizeMode='contain'
+                        />
+                    </View>
                     {/* //categories */}
+
                     <ScrollView
                         horizontal
-                        contentContainerStyle={tw`mb-6 h-26 mt-4 px-6`}
+                        contentContainerStyle={tw`mb-12  h-26 px-4 ${
+                            Platform.OS === "ios" ? " pb-0 mb-0 " : ""
+                        }`}
                         showsHorizontalScrollIndicator={false}
                     >
                         {categories.map((cat) => (
@@ -188,8 +214,9 @@ const HomeScreen = () => {
                             </Pressable>
                         ))}
                     </ScrollView>
-                    <Title title='New Arrivals' />
                     {/* // products */}
+                    <Title title='New Arrivals' />
+
                     <FlatList
                         data={DATA}
                         numColumns={2}
@@ -200,10 +227,10 @@ const HomeScreen = () => {
                             />
                         }
                         ItemSeparatorComponent={() => (
-                            <View style={tw`h-4`}></View>
+                            <View style={tw`h-4 `}></View>
                         )}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={tw`items-center justify-between `}
+                        contentContainerStyle={tw`items-center justify-between`}
                         renderItem={(item) => {
                             return (
                                 <Pressable
