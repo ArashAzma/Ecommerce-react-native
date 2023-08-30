@@ -154,19 +154,20 @@ const HomeScreen = () => {
                     </View>
                     {/* // banner */}
                     <View
-                        style={tw`w-full bg-white my-6 items-end flex-row max-h-70`}
+                        style={tw`w-full bg-white my-12 items-end flex-row h-22 `}
                     >
-                        <View style={tw`w-[40%] h-full  justify-center pl-6`}>
+                        <View style={tw`w-[40%] h-full justify-center pl-8`}>
                             <Text style={tw`text-3xl font-black`}>Arash %</Text>
                             <Text style={tw` font-semibold opacity-50`}>
                                 everything you ever wanted
                             </Text>
                         </View>
                         <Image
-                            source={require("../assets/Hero.jpg")}
+                            source={require("../assets/Hero.png")}
                             style={{
-                                height: width / 2,
-                                width: width / 1.5,
+                                ...tw`absolute -bottom-13 -right-3`,
+                                height: width / 2.1,
+                                width: width / 1.7,
                             }}
                             resizeMode='contain'
                         />
