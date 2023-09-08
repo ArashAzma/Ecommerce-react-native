@@ -23,17 +23,29 @@ const ProductScreen = () => {
     const [product, setProduct] = useState();
     const [inCart, setInCart] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
     const getProduct = async () => {
         const data = await fetchProduct(id);
         if (data) {
             setProduct(data);
             setInCart(checkCart(data));
             setLoading(false);
+        } else {
+            setError(data);
         }
     };
     useEffect(() => {
         getProduct();
     }, [id]);
+    if (error) {
+        return (
+            <View style={tw`flex-1 items-center justify-center `}>
+                <Text style={tw`text-red-800 font-semibold text-2xl`}>
+                    {error}
+                </Text>
+            </View>
+        );
+    }
     return (
         <View style={tw`flex-1 items-center justify-center bg-white`}>
             {loading ? (

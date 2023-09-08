@@ -9,7 +9,7 @@ import tw from "twrnc";
 const ProductCard = ({ item }) => {
     const [inCart, setInCart] = useState(false);
     const { title, image, price } = item;
-    const { width, height } = Dimensions.get("window");
+    const { width } = Dimensions.get("window");
     const { checkCart, addToCart, removeFromCart } = useContext(cartContext);
     useEffect(() => {
         setInCart(checkCart(item));
