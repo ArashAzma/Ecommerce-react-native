@@ -6,6 +6,7 @@ An easy-to-use mobile shopping application that uses an API to search and filter
 
 - React Native
 - REST API
+- AsyncStorage
 - Tailwind
 - react navigation
 - Expo
@@ -22,3 +23,4 @@ An easy-to-use mobile shopping application that uses an API to search and filter
 ![en2](https://github.com/ArashAzma/Ecommerce-react-native/assets/46264576/6807394f-4196-4016-b1f8-e5fc87ef5486)
 ![en3](https://github.com/ArashAzma/Ecommerce-react-native/assets/46264576/97c6d282-f2a7-4ddc-adb4-af67a3ae3434)
 
+## download the apk file in releases
