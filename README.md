@@ -5,9 +5,10 @@ An easy-to-use mobile shopping application that uses an API to search and filter
 ## Technologies Used
 
 - React Native
-- Expo
 - REST API
+- Tailwind
 - react navigation
+- Expo
 
 ## Installation
 
