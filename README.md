@@ -1,7 +1,7 @@
 # React Native Ecommerce
 
 An easy-to-use mobile shopping application that uses an API to search and filter products based on their title and categories. You can add items to your cart and view each product on its page to see the final price.
-
+`please use a Vpn if items dont load` 
 ## Technologies Used
 
 - React Native
